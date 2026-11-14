@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b12">
+  <meta name="description" content="Samanyolu ve Andromeda’yı üç boyutta keşfet. Yıldız yörüngelerini ve galaksilerin dönüş eğrilerini karşılaştır.">
+  <title>GalaxyV2 · Galaksi Atlası</title>
+  <link rel="icon" type="image/png" href="./assets/icon.png">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <header class="masthead">
+    <a href="./" class="brand" aria-label="GalaxyV2 ana görünüm">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>Galaxy<span class="version">V2</span><small>GALAKSİ ATLASI</small></span>
+    </a>
+    <nav class="galaxies" aria-label="Galaksi seç">
+      <button type="button" data-galaxy="milkyWay" aria-pressed="true">Samanyolu</button>
+      <button type="button" data-galaxy="andromeda" aria-pressed="false">Andromeda</button>
+    </nav>
+    <button type="button" class="model-button" id="open-model"><span aria-hidden="true">◎</span> <span>Fizik modeli</span></button>
+  </header>
+
+  <main>
+    <section class="observatory" aria-label="Üç boyutlu gözlem">
+      <canvas id="space" tabindex="0" aria-label="3B galaksi. Ok tuşları kamerayı döndürür, artı ve eksi yakınlaştırır."></canvas>
+      <div class="scene-shade" aria-hidden="true"></div>
+      <div class="hero">
+        <p class="eyebrow"><span></span> <span id="catalog">MW</span> <i></i> <span id="morphology">ÇUBUKLU SARMAL</span></p>
+        <h1 id="galaxy-name">Samanyolu</h1>
+        <dl class="specs">
+          <div><dt>MODEL ÇAPI</dt><dd id="diameter">50 <small>kpc</small></dd></div>
+          <div><dt>SARMAL KOLLAR</dt><dd id="arms">4</dd></div>
+          <div><dt>YILDIZ ÖRNEĞİ</dt><dd id="population">—</dd></div>
+        </dl>
+      </div>
+      <div class="view-tools">
+        <section class="tool-panel" aria-label="Kamera ve sahne katmanları">
+          <p class="section-label">KAMERA</p>
+          <div class="camera-options" role="group" aria-label="Kamera açısı">
+            <button type="button" data-camera="perspective" aria-pressed="true"><i class="plane slant" aria-hidden="true"></i> Eğik</button>
+            <button type="button" data-camera="top" aria-pressed="false"><i class="plane face" aria-hidden="true"></i> Tepeden</button>
+            <button type="button" data-camera="edge" aria-pressed="false"><i class="plane edge" aria-hidden="true"></i> Yandan</button>
+          </div>
+          <p class="section-label layer-title">KATMANLAR</p>
+          <div class="layer-options">
+            <label><input type="checkbox" data-layer="stars" checked> Yıldız</label>
+            <label><input type="checkbox" data-layer="gas" checked> Gaz</label>
+            <label><input type="checkbox" data-layer="dust" checked> Toz</label>
+            <label><input type="checkbox" data-layer="orbit" checked> Yörünge</label>
+          </div>
+        </section>
+        <p class="gesture"><span aria-hidden="true">↔</span> Sürükle ve döndür <i></i> <span aria-hidden="true">⊕</span> Kaydır ve yakınlaş</p>
+      </div>
+      <p id="probe-tag" hidden>Güneş çevresi</p>
+      <p id="render-error" class="render-error" role="status" hidden>3B görünüm için WebGL 2 ve donanım hızlandırması gerekiyor. Dönüş eğrisini inceleyebilirsin.</p>
+      <span class="frame frame-top" aria-hidden="true"></span>
+      <span class="frame frame-bottom" aria-hidden="true"></span>
+    </section>
+
+    <aside class="science" aria-labelledby="curve-title">
+      <div class="panel-heading">
+        <div><p class="section-label">YÖRÜNGE FİZİĞİ</p><h2 id="curve-title">Dönüş eğrisi</h2></div>
+        <span class="curve-glyph" aria-hidden="true">∿</span>
+      </div>
+      <canvas id="rotation" role="img" aria-label="Yarıçapa göre toplam dairesel hız, disk, merkez şişkinliği ve karanlık madde halosu"></canvas>
+      <div class="legend" aria-label="Eğri bileşenleri">
+        <span class="total">Toplam</span><span class="disk">Disk</span><span class="bulge">Merkez</span><span class="halo">Halo</span>
+      </div>
+      <label class="radius-label" for="radius">Yörünge yarıçapı <output id="radius-value" for="radius">8,2 kpc</output></label>
+      <input id="radius" type="range" min="1" max="25" step="0.1" value="8.2">
+      <dl class="readouts">
+        <div><dt>DAİRESEL HIZ</dt><dd id="velocity">—</dd></div>
+        <div><dt>YÖRÜNGE SÜRESİ</dt><dd id="period">—</dd></div>
+      </dl>
+    </aside>
+  </main>
+
+  <footer class="transport" aria-label="Simülasyon zamanı">
+    <button class="play" id="play" type="button" aria-label="Duraklat"><span aria-hidden="true"></span></button>
+    <div class="clock"><span class="section-label">SİMÜLASYON ZAMANI</span><output id="time-value" for="time" aria-live="off">0,0 Myr</output></div>
+    <input id="time" aria-label="Simülasyon zamanı, milyon yıl" type="range" min="0" max="500" step="0.1" value="0">
+    <label class="rate-label"><span class="section-label">HIZ</span>
+      <select id="rate" aria-label="Simülasyon hızı">
+        <option value="1">1 Myr/sn</option>
+        <option value="4" selected>4 Myr/sn</option>
+        <option value="12">12 Myr/sn</option>
+        <option value="30">30 Myr/sn</option>
+      </select>
+    </label>
+    <button id="reset-time" class="reset" type="button" aria-label="Zamanı sıfırla" title="Zamanı sıfırla">↺</button>
+  </footer>
+
+  <dialog id="model">
+    <form method="dialog"><button class="close" type="submit" aria-label="Kapat">×</button></form>
+    <p class="section-label">GALAXYV2</p>
+    <h2>Fizik modeli</h2>
+    <p>Yıldız diski, merkez şişkinliği ve karanlık madde halosu ayrı kütle bileşenleri olarak modellenir. Eğride her bileşenin hızı ayrı çizilir. Toplam hız, bu hızların kareleri toplamının kareköküdür.</p>
+    <dl class="model-parts">
+      <div><dt>Disk</dt><dd>Miyamoto–Nagai potansiyeli</dd></div>
+      <div><dt>Merkez</dt><dd>Hernquist potansiyeli</dd></div>
+      <div><dt>Halo</dt><dd>Navarro–Frenk–White profili</dd></div>
+      <div><dt>Yörünge izi</dt><dd>Sabit zaman adımlı leapfrog integrasyonu</dd></div>
+    </dl>
+    <p>Disk yıldızları yarıçapa bağlı açısal hızla ilerler. Sarmal kollar, çubuk ve gaz, kendi desen hızıyla dönen izleyici katmanlardır. Modelde bileşenler sabittir ve yıldızların karşılıklı kütleçekimi ihmal edilir.</p>
+    <p class="model-links"><a href="https://github.com/hfatih/GalaxyV2#the-physics" target="_blank" rel="noopener">Denklemler ve kaynaklar ↗</a></p>
+  </dialog>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
