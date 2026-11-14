@@ -132,7 +132,7 @@ export function createRenderer(canvas) {
     gl.uniform1f(loc.Dpr, dpr);
     gl.uniform1f(loc.PointScale, fy * pixelHeight);
     draw(layers.background, 0, 0.82);
-    draw(layers.glow, 1, 0.55);
+    if (visibility.stars) draw(layers.glow, 1, 0.55);
     if (visibility.gas) draw(layers.gas, 1, 1.0);
     if (visibility.dust) {
       gl.blendFunc(gl.ZERO, gl.ONE_MINUS_SRC_ALPHA);
