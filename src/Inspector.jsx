@@ -69,12 +69,15 @@ function NumberControl({ field, value, onChange }) {
   );
 }
 
-export default function Inspector({ controls, onChange, onReset }) {
+export default function Inspector({ controls, onChange, onReset, onClose }) {
   return (
     <aside className="inspector" id="galaxy-settings" aria-labelledby="inspector-title">
       <div className="panel-title inspector-title">
         <h2 id="inspector-title">Galaksi Ayarları</h2>
-        <button className="reset-button" type="button" onClick={onReset}><span aria-hidden="true">↶</span> Sıfırla</button>
+        <div className="inspector-actions">
+          <button className="reset-button" type="button" onClick={onReset}><span aria-hidden="true">↶</span> Sıfırla</button>
+          <button className="drawer-close" type="button" onClick={onClose} aria-label="Ayarları kapat">×</button>
+        </div>
       </div>
       <div className="inspector-fields">
         {groups.map(([group, fields], index) => (

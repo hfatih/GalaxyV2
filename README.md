@@ -2,7 +2,7 @@
 
 # GalaxyV2
 
-**Shape a galaxy in your browser**
+**Shape a galaxy and watch its disk evolve**
 
 [**Open the studio ↗**](https://hfatih.github.io/GalaxyV2/) · [Türkçe](README.tr.md) · [Controls](#controls)
 
@@ -10,11 +10,11 @@
 ![Three.js](https://img.shields.io/badge/Three.js-WebGL-263650?style=flat-square)
 [![MIT](https://img.shields.io/badge/License-MIT-9ab7ff?style=flat-square)](LICENSE)
 
-[![GalaxyV2 with the Milky Way and the open galaxy settings panel](assets/samanyolu.jpg)](https://hfatih.github.io/GalaxyV2/)
+[![GalaxyV2 with a full-screen Milky Way and its evolution timeline](assets/samanyolu.jpg)](https://hfatih.github.io/GalaxyV2/)
 
 </div>
 
-GalaxyV2 brings the original [Samanyolu3D](https://github.com/hfatih/samanyolu3d) simulation into a new studio interface. Open the Milky Way, Andromeda or **Özel Ayar** (Custom). Change the arms and bend the disk while the 3D model stays in view. The original seeded geometry and preset values are preserved.
+GalaxyV2 brings the original [Samanyolu3D](https://github.com/hfatih/samanyolu3d) controls into a full-screen 3D viewer. Open the Milky Way, Andromeda or **Özel Ayar** (Custom). Use **Ayarlar** to change the arms and bend the disk while the model stays in view.
 
 ## Controls
 
@@ -40,18 +40,32 @@ Drag a slider or type a value next to it. **Sıfırla** restores the selected mo
 | Zoom | Mouse wheel | Pinch |
 | Change angle | **Eğik**, **Üst**, **Yan** | Same buttons |
 
-**Yan** is the edge-on view for checking disk warp. The viewport also has a pause control and a toggle for the original Solar System, Orion Arm and galactic-center labels. The first two are Milky Way reference markers.
+**Yan** is the edge-on view for checking disk warp. The camera bar includes browser fullscreen and a toggle for the original Solar System, Orion Arm and galactic-center labels. The first two are Milky Way reference markers.
 
 <details>
 <summary>Andromeda in the studio</summary>
 
-![Andromeda and its original preset values in GalaxyV2](assets/andromeda.jpg)
+![Andromeda after 150 million years of differential rotation](assets/andromeda.jpg)
 
 </details>
 
-## How the model works
+## Evolution model
 
-A seeded generator assigns samples to spiral arms, adds Gaussian spread, and bends the disk vertically. For arm index $k$, arm count $N$, radius $r$ and twist $T$, the nominal azimuth is $2\pi k/N + 0.02rT$. The warp uses a radially increasing sinusoid. The bulge and halo are sampled separately. The visualization rotates the complete galaxy group.
+**Diferansiyel dönüş** advances each disk sample on a circular orbit at its own radius. **Sabit biçim** gives the disk a single angular speed at the preset's reference radius for comparison. Pause, scrub or reset the timeline to inspect an age between 0 and 1,000 million years.
+
+The squared circular speed in the midplane sums the contributions of a Miyamoto–Nagai disk, a Hernquist bulge and a Navarro–Frenk–White halo. For radius $R$ in kpc and circular speed $v_c$ in km/s:
+
+$$
+v_c^2=v_{\mathrm{disk}}^2+v_{\mathrm{bulge}}^2+v_{\mathrm{halo}}^2,
+\qquad
+\Omega(R)=1.022712165\times10^{-3}\frac{v_c(R)}{R}\ \mathrm{rad/Myr}.
+$$
+
+The GPU calculates each sample's azimuth as $\phi(t)=\phi_0-\Omega(R)t$, holding its initial radius and height fixed. The inner 0.35 kpc shares one angular speed. In this model the arms are material features in a fixed axisymmetric field. It omits self-gravity, gas dynamics and star formation. [Differential winding](https://galaxiesbook.org/chapters/IV-04.-Internal-Evolution-in-Galaxies_3-Spiral-structure.html) · [Milky Way rotation curve](https://arxiv.org/abs/1810.09466)
+
+## Rendering and scale
+
+Shape, age and population changes reuse the GPU buffers. Automatic quality adapts the drawing resolution and the visible fraction of the selected samples to measured frame times. The quality indicator displays that fraction when reduced.
 
 The sample scale divides the original presets’ reference population by the combined disk, bulge and halo sample count. Samanyolu3D uses 150 billion for the Milky Way and one trillion for Andromeda. These are reference values for the display. The scene uses model-space distances and contains illustrative landmark positions. See the original project’s [references](https://github.com/hfatih/samanyolu3d#-references--scientific-notes).
 

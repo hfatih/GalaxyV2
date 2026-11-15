@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import { Color } from 'three';
+import { angularSpeed, MODEL_DISK_RADIUS, profiles } from './physics.js';
 
 export const presets = {
   milkyWay: {
@@ -36,38 +37,39 @@ export function formatScale(realCount, sampleCount) {
   return '1 nokta ≈ ' + scaleNumber.format(ratio / divisor) + (unit ? ' ' + unit : '') + ' yıldız';
 }
 
-// The seeded geometry comes from Samanyolu3D's MilkyWay3D.jsx.
-export function generateSpiralArmStars({ count, arms = 4, armSpread = 0.5, armTwist = 1.5, radius = 150, randomness = 0.6, height = 6, warp = 0, seed = 42 }) {
+// The original seeded disk distribution is assembled in the vertex shader.
+export function sampleDisk(count, seed = 42) {
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
+  const orbits = new Float32Array(count * 4);
   const rng = mulberry32(seed);
-  const color = new THREE.Color();
+  const color = new Color();
   for (let i = 0; i < count; i++) {
-    const armIndex = i % arms;
-    const r = Math.pow(rng(), 0.7) * radius;
-    const baseTheta = (armIndex / arms) * Math.PI * 2 + r * armTwist * 0.02;
-    const phi = baseTheta + normalRandom(rng) * armSpread;
-    const z = normalRandom(rng) * (1 - r / radius) * height;
-    const rr = r + normalRandom(rng) * randomness * (1 + r / radius);
-    const x = Math.cos(phi) * rr;
-    const y = Math.sin(phi) * rr;
-    const warpOffset = warp * Math.pow(r / radius, 1.2) * Math.sin(phi * 2 + r * 0.035);
-    positions[3 * i] = x;
-    positions[3 * i + 1] = y;
-    positions[3 * i + 2] = z + warpOffset;
-    const t = r / radius;
+    const r = Math.pow(rng(), 0.7) * MODEL_DISK_RADIUS;
+    const t = r / MODEL_DISK_RADIUS;
+    const scatter = normalRandom(rng);
+    const z = normalRandom(rng) * (1 - t) * 6;
+    const rr = r + normalRandom(rng) * 0.9 * (1 + t);
+    const normalized = Math.abs(rr) / MODEL_DISK_RADIUS;
+    positions[3 * i] = r;
+    positions[3 * i + 1] = rr;
+    positions[3 * i + 2] = z;
+    orbits[4 * i] = scatter;
+    orbits[4 * i + 1] = Math.pow(t, 1.2);
+    orbits[4 * i + 2] = angularSpeed(normalized * profiles.milkyWay.extent, profiles.milkyWay);
+    orbits[4 * i + 3] = angularSpeed(normalized * profiles.andromeda.extent, profiles.andromeda);
     color.setHSL(0.6 - 0.4 * t, 0.8 - 0.5 * t, 0.5 + 0.4 * (1 - t));
     colors[3 * i] = color.r;
     colors[3 * i + 1] = color.g;
     colors[3 * i + 2] = color.b;
   }
-  return { positions, colors };
+  return { positions, colors, orbits };
 }
 export function generateBulgeStars({ count = 20000, radius = 18, seed = 1337 }) {
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
   const rng = mulberry32(seed);
-  const color = new THREE.Color();
+  const color = new Color();
   for (let i = 0; i < count; i++) {
     const u = rng();
     const r = radius * Math.pow(u, 1 / 3) * (0.3 + 0.7 * rng());
