@@ -22,7 +22,7 @@ function Sources({ dialog, profile }) {
           <div key={radius}><dt>{radius} kpc yörünge</dt><dd>{integer.format(orbitPeriod(radius, profile))} milyon yıl / tur</dd></div>
         ))}
       </dl>
-      <p>Potansiyel sabittir ve yıldızların karşılıklı çekimi hesaba katılmaz. Güneş Sistemi ve Orion Kolu etiketleri Samanyolu referans işaretçileridir.</p>
+      <p>Potansiyel sabittir ve yıldızların karşılıklı çekimi hesaba katılmaz. Güneş Sistemi ve Orion Kolu etiketleri yalnızca Samanyolu’nda görünür.</p>
       <details>
         <summary>Referanslar ve ölçekler</summary>
         <dl>

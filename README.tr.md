@@ -36,7 +36,7 @@ Sürgüleri kullanabilir veya yanındaki kutuya değer yazabilirsin. **Sıfırla
 | Yakınlaştır | Fare tekerleği | İki parmakla kıstır |
 | Görüş açısı | **Eğik**, **Üst**, **Yan** | Aynı düğmeler |
 
-Diskin bükülmesini **Yan** görünümde inceleyebilirsin. Kamera çubuğundan tarayıcı tam ekranına geçebilir ve Güneş Sistemi, Orion Kolu ve galaktik merkez işaretçilerini açıp kapatabilirsin. İlk iki etiket Samanyolu referans işaretçisidir.
+Diskin bükülmesini **Yan** görünümde inceleyebilirsin. Kamera çubuğundan tarayıcı tam ekranına geçebilir ve konum işaretçilerini açıp kapatabilirsin. Galaktik merkez her modelde, Güneş Sistemi ve Orion Kolu yalnızca Samanyolu’nda görünür.
 
 <details>
 <summary>Andromeda önizlemesi</summary>

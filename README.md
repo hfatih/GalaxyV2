@@ -40,7 +40,7 @@ Drag a slider or type a value next to it. **Sıfırla** restores the selected mo
 | Zoom | Mouse wheel | Pinch |
 | Change angle | **Eğik**, **Üst**, **Yan** | Same buttons |
 
-**Yan** is the edge-on view for checking disk warp. The camera bar includes browser fullscreen and a toggle for the original Solar System, Orion Arm and galactic-center labels. The first two are Milky Way reference markers.
+**Yan** is the edge-on view for checking disk warp. The camera bar includes browser fullscreen and a landmark toggle. The galactic center is available in every model. The Solar System and Orion Arm appear only in the Milky Way.
 
 <details>
 <summary>Andromeda in the studio</summary>

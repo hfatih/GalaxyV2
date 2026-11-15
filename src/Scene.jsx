@@ -122,13 +122,16 @@ function Galaxy({ controls, playing, showMarkers, preset, evolution, clock, qual
       <points geometry={halo} visible={controls.showDust}>
         <pointsMaterial size={1.14} transparent opacity={0.09} vertexColors blending={AdditiveBlending} depthWrite={false} />
       </points>
-      {showMarkers && markers.map((marker, index) => (
-        <group key={marker.tint} ref={group => { labelGroups.current[index] = group; }} position={[marker.x, marker.y, 0]}>
-          <Html zIndexRange={[2, 0]} style={{ pointerEvents: 'none' }}>
-            <div className={'map-marker ' + marker.tint}>{marker.label}</div>
-          </Html>
-        </group>
-      ))}
+      {showMarkers && markers.map((marker, index) => {
+        if (preset !== 'milkyWay' && marker.tint !== 'center') return null;
+        return (
+          <group key={marker.tint} ref={group => { labelGroups.current[index] = group; }} position={[marker.x, marker.y, 0]}>
+            <Html zIndexRange={[2, 0]} style={{ pointerEvents: 'none' }}>
+              <div className={'map-marker ' + marker.tint}>{marker.label}</div>
+            </Html>
+          </group>
+        );
+      })}
     </>
   );
 }
