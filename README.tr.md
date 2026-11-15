@@ -68,6 +68,6 @@ npm run build
 npm run preview
 ```
 
-Arayüz React, sahne Three.js ve React Three Fiber ile çalışır. Vite çıktıyı `dist/` dizinine üretir. GitHub Actions bu çıktıyı Pages’e gönderir. [Galaksi modeli](src/model.js) · [3B sahne](src/Scene.jsx) · [Ayar paneli](src/Inspector.jsx)
+Arayüz React, sahne Three.js ve React Three Fiber ile çalışır. Vite çıktıyı `dist/` dizinine üretir. GitHub Pages derlenmiş çıktıyı `gh-pages` dalından sunar. [Galaksi modeli](src/model.js) · [3B sahne](src/Scene.jsx) · [Ayar paneli](src/Inspector.jsx)
 
 Kod [MIT](LICENSE) lisanslıdır. [DM Sans](assets/dm-sans-OFL.txt) yazı tipi SIL Open Font lisansıyla dağıtılır.

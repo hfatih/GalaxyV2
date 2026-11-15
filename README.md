@@ -72,6 +72,6 @@ npm run build
 npm run preview
 ```
 
-React renders the studio. Three.js and React Three Fiber render the scene. Vite builds the site into `dist/`, and GitHub Actions publishes it to Pages. [Galaxy model](src/model.js) · [3D scene](src/Scene.jsx) · [Settings panel](src/Inspector.jsx)
+React renders the studio. Three.js and React Three Fiber render the scene. Vite builds the site into `dist/`. GitHub Pages serves that compiled output from the `gh-pages` branch. [Galaxy model](src/model.js) · [3D scene](src/Scene.jsx) · [Settings panel](src/Inspector.jsx)
 
 The code is [MIT licensed](LICENSE). The bundled [DM Sans](assets/dm-sans-OFL.txt) fonts use the SIL Open Font License.
